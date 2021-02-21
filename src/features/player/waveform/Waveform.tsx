@@ -25,9 +25,11 @@ const Waveform = () => {
             <WaveformItems>
                 {currentSong?.waveform.map((w, i) => (
                     <One
+                        style={{
+                            height: `${w}%`,
+                            width: `calc(100vw /  ${currentSong.waveform.length})`,
+                        }}
                         key={i}
-                        heightItem={w}
-                        waveformLength={currentSong.waveform.length}
                     />
                 ))}
             </WaveformItems>
@@ -50,10 +52,8 @@ const WaveformItems = styled.div`
     align-items: flex-end;
 `;
 
-const One = styled.div<IOne>`
+const One = styled.div`
     background-color: #755dd5;
-    height: ${props => props.heightItem}%;
-    width:  ${props => `calc( 100vw / ${props.waveformLength})`};
 `;
 
 export default Waveform

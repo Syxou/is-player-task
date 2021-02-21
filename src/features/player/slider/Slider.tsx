@@ -1,9 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectPlayList } from '../PlayerSlice';
+import { selectPlayList, setCurrentSong } from '../PlayerSlice';
 import sliderImg from '../../../assets/unreleased_cover.png';
 import importImage from '../../../utils/importImage';
 
@@ -14,6 +14,7 @@ import SliderItem from './Slideritem';
 const SliderPlayer = () => {
 
     const playList = useSelector(selectPlayList);
+    const dispatch = useDispatch();
 
     const settings = {
         dots: false,
@@ -23,7 +24,8 @@ const SliderPlayer = () => {
         slidesToShow: 1,
         centerMode: true,
         centerPadding: "22%",
-        speed: 500
+        speed: 500,
+        afterChange: (id: number) => dispatch(setCurrentSong(id)),
     };
 
     return (

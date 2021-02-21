@@ -1,11 +1,15 @@
 import React from 'react'
 import styled from 'styled-components';
 
-const NextTrack: React.FC = () => {
+interface INextTrack {
+    nameTrack: string,
+}
+
+const NextTrack: React.FC<INextTrack> = ({ nameTrack }) => {
     return (
         <Wrap>
             <Next>NEXT</Next>
-            <Track>Livin' In A Movie</Track>
+            <Track>{nameTrack}</Track>
         </Wrap>
     )
 }

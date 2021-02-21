@@ -1,18 +1,25 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import getTime from '../../utils/getTime';
+import { selectNextSong } from '../player/PlayerSlice';
 import PlayLIst from '../playlist/PlayList';
 import NextTrack from './NextTrack';
 
 const Navigation: React.FC = () => {
+
+    const nextSong = useSelector(selectNextSong)
     return (
         <Wrap>
             <Nav>
                 <PlayLIstWrap>
                     <PlayLIst />
                 </PlayLIstWrap>
-                <NextTrack />
+                <NextTrack
+                    nameTrack={nextSong.trackName}
+                />
                 <div>
-                    <span>3:40</span>
+                    <span>{getTime(nextSong.time)}</span>
                 </div>
             </Nav>
         </Wrap>
