@@ -57,6 +57,7 @@ export const playerSlice = createSlice({
                 } else {
                     state.currentSong = { ...state.songs[0] };
                 }
+                state.timePoint = 0;
             }
         },
         prevSong: (state) => {
@@ -70,6 +71,7 @@ export const playerSlice = createSlice({
                 } else {
                     state.currentSong = { ...state.songs[state.songs.length - 1] };
                 }
+                state.timePoint = 0;
             }
         },
 

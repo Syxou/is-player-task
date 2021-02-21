@@ -8,21 +8,21 @@ import 'react-rangeslider/lib/index.css'
 import { selectCurrentSong, selectTimePoint, updatingTimePoint } from '../../PlayerSlice';
 
 const Range: React.FC = () => {
-    const [value, setValue] = React.useState(0);
+
     const currentSong = useSelector(selectCurrentSong);
     const timePoint = useSelector(selectTimePoint);
     const dispatch = useDispatch();
 
-    const getTime = () => {
-        const h = Math.floor(timePoint / 60 / 60);
-        const m = Math.floor(timePoint / 60) - (h * 60);
-        const s = timePoint % 60;
+    const getTime = (timestamp: number) => {
+        const h = Math.floor(timestamp / 60 / 60);
+        const m = Math.floor(timestamp / 60) - (h * 60);
+        const s = timestamp % 60;
         return `${h ? h + ':' : ''}${m}:${s}`
     }
 
     return (
         <RangeWrap>
-            <Timer>{getTime()}</Timer>
+            <Timer>{getTime(timePoint)}</Timer>
             <SliderWrap>
                 <Slider
                     value={timePoint}
@@ -31,7 +31,7 @@ const Range: React.FC = () => {
                     onChange={(v) => dispatch(updatingTimePoint(v))}
                 />
             </SliderWrap>
-            <Timer>{currentSong.time / 60}</Timer>
+            <Timer>{getTime(currentSong.time)}</Timer>
         </RangeWrap>
     )
 }
