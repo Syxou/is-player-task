@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import 'react-rangeslider/lib/index.css'
 
 import { selectCurrentSong, selectTimePoint, updatingTimePoint } from '../../PlayerSlice';
+import getTime from '../../../../utils/getTime';
 
 const Range: React.FC = () => {
 
@@ -13,12 +14,6 @@ const Range: React.FC = () => {
     const timePoint = useSelector(selectTimePoint);
     const dispatch = useDispatch();
 
-    const getTime = (timestamp: number) => {
-        const h = Math.floor(timestamp / 60 / 60);
-        const m = Math.floor(timestamp / 60) - (h * 60);
-        const s = timestamp % 60;
-        return `${h ? h + ':' : ''}${m}:${s}`
-    }
 
     return (
         <RangeWrap>
