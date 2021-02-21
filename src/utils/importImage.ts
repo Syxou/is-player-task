@@ -1,1 +1,0 @@
-export default (path: string) => import(`../${path}`).then((image) => image);
