@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import 'react-rangeslider/lib/index.css'
 
-import { nextSong, selectCurrentSong, selectTimePoint, updatingTimePoint } from '../../PlayerSlice';
+import { nextSong, selectCurrentSong, selectRepeatStatus, selectTimePoint, updatingTimePoint } from '../../PlayerSlice';
 import getTime from '../../../../utils/getTime';
 
 
@@ -14,17 +14,22 @@ const Range: React.FC = () => {
     const [mouseHover, setMouseHover] = useState(false);
     const currentSong = useSelector(selectCurrentSong);
     const timePoint = useSelector(selectTimePoint);
+    const repeatStatus = useSelector(selectRepeatStatus);
     const dispatch = useDispatch();
 
     const sliderChangeHandler = (value: number) => {
         if (value <= currentSong.time && mouseHover) {
-            dispatch(updatingTimePoint(value))
+            dispatch(updatingTimePoint(value));
         }
     };
-    
+
     useEffect(() => {
         if (timePoint === currentSong.time && !mouseHover) {
-            dispatch(nextSong());
+            if (repeatStatus) {
+                dispatch(updatingTimePoint(0));
+            } else {
+                dispatch(nextSong());
+            }
         }
     }, [timePoint]);
 

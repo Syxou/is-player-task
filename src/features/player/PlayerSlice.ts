@@ -117,7 +117,6 @@ export const playerSlice = createSlice({
             if (state.currentSong) {
                 currentIndex = state.songs.findIndex((s) => s.id === state.currentSong.id);
             }
-            console.log(currentIndex)
             if (currentIndex !== undefined && currentIndex >= 0) {
                 if (state.songs[currentIndex + 1]) {
                     state.nextSong = { ...state.songs[currentIndex + 1] };
@@ -125,6 +124,9 @@ export const playerSlice = createSlice({
                     state.nextSong = { ...state.songs[0] };
                 }
             };
+        },
+        setRepeat: (state) => {
+            state.repeat = !state.repeat;
         },
     },
 })
@@ -137,6 +139,7 @@ export const {
     setPlayList,
     setTimePoint,
     getNextSong,
+    setRepeat,
 } = playerSlice.actions;
 
 export const loadPlayList = (): AppThunk => (dispatch) => {
@@ -147,7 +150,6 @@ export const loadPlayList = (): AppThunk => (dispatch) => {
 };
 
 export const swipeSongSwitchHandler = (swipe: string): AppThunk => (dispatch) => {
-    console.log(swipe)
     if (swipe === 'left') {
         dispatch(setNextSong());
     }
@@ -185,5 +187,6 @@ export const selectTimePoint = (state: RootState) => state.player.timePoint;
 export const selectCurrentWaveform = (state: RootState) => state.player.currentSong.waveform;
 export const selectNextSong = (state: RootState) => state.player.nextSong;
 export const selectNextHandler = (state: RootState) => state.player.nextHandler;
+export const selectRepeatStatus = (state: RootState) => state.player.repeat;
 
 export default playerSlice.reducer;
