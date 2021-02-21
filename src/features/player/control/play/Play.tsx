@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import playActive from '../../../../assets/Play_active.png'
 import playInactive from '../../../../assets/Play_inactive.png'
-import { selectPlayStatus, playPause } from '../../PlayerSlice';
+import { selectPlayStatus, playPause, updatingTimePoint } from '../../PlayerSlice';
 
 interface IPlay {
     itsPlay: boolean,
@@ -13,8 +13,17 @@ interface IPlay {
 const Play: React.FC = () => {
     const player = useSelector(selectPlayStatus);
     const dispatch = useDispatch();
-    // const [play, setPlay] = useState(false);
-    console.log(player)
+    React.useEffect(() => {
+        if (player) {
+            const interval = setInterval(() => {
+                console.log(player)
+                dispatch(updatingTimePoint());
+            }, 1000);
+            return () => {
+                clearInterval(interval);
+            }
+        }
+    }, [player])
     return (
         <>
             <PlayButton

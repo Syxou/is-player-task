@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { sortAndDeduplicateDiagnostics } from 'typescript';
 import { AppThunk, RootState } from '../../app/store';
 import fakePlayList from '../../utils/fakePlayList';
 
@@ -8,6 +9,7 @@ export interface IPlayer {
     play: boolean,
     repeat: boolean,
     shuffle: boolean,
+    timePoint: number,
 };
 
 export interface ISong {
@@ -18,6 +20,10 @@ export interface ISong {
     label: string,
 };
 
+export interface ISongControl {
+    timePoint: number;
+}
+
 const initialState: IPlayer = {
     songs: [],
     currentSong: {
@@ -27,6 +33,7 @@ const initialState: IPlayer = {
         time: 0,
         label: '',
     },
+    timePoint: 0,
     play: false,
     repeat: false,
     shuffle: false,
@@ -39,12 +46,11 @@ export const playerSlice = createSlice({
         playPause: (state) => {
             state.play = !state.play;
         },
-        nextSong: (state, action: PayloadAction) => {
+        nextSong: (state) => {
             let currentIndex;
             if (state.currentSong) {
                 currentIndex = state.songs.findIndex((s) => s.id === state.currentSong.id);
             }
-            console.log('currentIndex', currentIndex)
             if (currentIndex !== undefined && currentIndex >= 0) {
                 if (state.songs[currentIndex + 1]) {
                     state.currentSong = { ...state.songs[currentIndex + 1] };
@@ -53,12 +59,11 @@ export const playerSlice = createSlice({
                 }
             }
         },
-        prevSong: (state, action: PayloadAction) => {
+        prevSong: (state) => {
             let currentIndex;
             if (state.currentSong) {
                 currentIndex = state.songs.findIndex((s) => s.id === state.currentSong.id);
             }
-            console.log('currentIndex', currentIndex)
             if (currentIndex !== undefined && currentIndex >= 0) {
                 if (state.songs[currentIndex - 1]) {
                     state.currentSong = { ...state.songs[currentIndex - 1] };
@@ -66,6 +71,22 @@ export const playerSlice = createSlice({
                     state.currentSong = { ...state.songs[state.songs.length - 1] };
                 }
             }
+        },
+
+        setTimePoint: (state, action: PayloadAction<number>) => {
+
+            const currentTimePoint = state.timePoint;
+            const maxTimePoint = state.currentSong.time;
+
+            console.log(currentTimePoint, maxTimePoint, action.payload)
+            if (maxTimePoint >= action.payload) {
+                if (action.payload) {
+                    state.timePoint = +action.payload.toFixed(2);
+                } else {
+                    state.timePoint = +state.timePoint.toFixed(2) + 1;
+                }
+            }
+            console.log(state.timePoint)
         },
 
         setPlayList: (state, action: PayloadAction<ISong[]>) => {
@@ -80,16 +101,27 @@ export const {
     nextSong,
     prevSong,
     setPlayList,
+    setTimePoint,
 } = playerSlice.actions;
 
 export const loadPlayList = (): AppThunk => (dispatch) => {
     setTimeout(() => {
         dispatch(setPlayList(fakePlayList))
     }, 535);
-}
+};
+
+export const updatingTimePoint = (amount?: number): AppThunk => (dispatch) => {
+    console.log(amount)
+    if (amount) {
+        dispatch(setTimePoint(amount));
+    } else {
+        dispatch(setTimePoint(0));
+    }
+};
 
 export const selectPlayStatus = (state: RootState) => state.player.play;
 export const selectPlayList = (state: RootState) => state.player.songs;
 export const selectCurrentSong = (state: RootState) => state.player.currentSong;
+export const selectTimePoint = (state: RootState) => state.player.timePoint;
 
 export default playerSlice.reducer;
