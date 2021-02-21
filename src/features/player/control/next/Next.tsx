@@ -6,7 +6,6 @@ import { ReactComponent as NextIcon } from '../../../../assets/next_ico.svg';
 import { nextSong } from '../../PlayerSlice';
 
 const Next = () => {
-
     const dispatch = useDispatch();
 
     return (

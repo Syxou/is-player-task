@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { sortAndDeduplicateDiagnostics } from 'typescript';
+import { idText, sortAndDeduplicateDiagnostics } from 'typescript';
 import { AppThunk, RootState } from '../../app/store';
 import fakePlayList from '../../utils/fakePlayList';
 
@@ -10,8 +10,14 @@ export interface IPlayer {
     repeat: boolean,
     shuffle: boolean,
     timePoint: number,
+    nextHandler: INextHandler;
     nextSong: ISong,
 };
+
+interface INextHandler {
+    action: 'prev' | 'next' | '',
+    id: number,
+}
 
 export interface ISong {
     id: number,
@@ -40,6 +46,10 @@ const initialState: IPlayer = {
     play: false,
     repeat: false,
     shuffle: false,
+    nextHandler: {
+        action: '',
+        id: 0,
+    },
     nextSong: {
         id: 0,
         trackName: '',
@@ -69,9 +79,7 @@ export const playerSlice = createSlice({
                     state.currentSong = { ...state.songs[0] };
                 }
                 state.timePoint = 0;
-
             }
-
         },
         setPrevSong: (state) => {
             let currentIndex;
@@ -101,9 +109,11 @@ export const playerSlice = createSlice({
             state.songs = action.payload;
             state.currentSong = state.songs[0];
         },
-        setCurrentSong: (state, action: PayloadAction<number>) => {
-            state.currentSong = { ...state.songs[action.payload] };
-            state.timePoint = 0;
+        nextHandler: (state, action: PayloadAction<'prev' | 'next'>) => {
+            state.nextHandler = {
+                action: action.payload,
+                id: state.currentSong.id,
+            };
         },
         getNextSong: (state) => {
             let currentIndex;
@@ -126,11 +136,11 @@ export const playerSlice = createSlice({
 
 export const {
     playPause,
+    nextHandler,
     setNextSong,
     setPrevSong,
     setPlayList,
     setTimePoint,
-    setCurrentSong,
     getNextSong,
 } = playerSlice.actions;
 
@@ -140,6 +150,17 @@ export const loadPlayList = (): AppThunk => (dispatch) => {
         dispatch(getNextSong());
     }, 535);
 };
+
+export const swipeSongSwitchHandler = (swipe: string): AppThunk => (dispatch) => {
+    console.log(swipe)
+    if (swipe === 'left') {
+        dispatch(setNextSong());
+    }
+    if (swipe === 'right') {
+        dispatch(setPrevSong());
+    }
+    dispatch(getNextSong());
+}
 
 export const updatingTimePoint = (amount?: number): AppThunk => (dispatch) => {
     if (amount) {
@@ -152,11 +173,13 @@ export const updatingTimePoint = (amount?: number): AppThunk => (dispatch) => {
 export const nextSong = (): AppThunk => (dispatch) => {
     dispatch(setNextSong());
     dispatch(getNextSong());
+    dispatch(nextHandler('next'));
 }
 
 export const prevSong = (): AppThunk => (dispatch) => {
     dispatch(setPrevSong());
     dispatch(getNextSong());
+    dispatch(nextHandler('prev'));
 }
 
 export const updatingNextSong = (): AppThunk => (dispatch) => {
@@ -170,5 +193,6 @@ export const selectCurrentSong = (state: RootState) => state.player.currentSong;
 export const selectTimePoint = (state: RootState) => state.player.timePoint;
 export const selectCurrentWaveform = (state: RootState) => state.player.currentSong.waveform;
 export const selectNextSong = (state: RootState) => state.player.nextSong;
+export const selectNextHandler = (state: RootState) => state.player.nextHandler;
 
 export default playerSlice.reducer;

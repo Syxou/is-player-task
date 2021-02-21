@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { createRef, useEffect } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectPlayList, setCurrentSong } from '../PlayerSlice';
-import sliderImg from '../../../assets/unreleased_cover.png';
-import importImage from '../../../utils/importImage';
+import { selectPlayList, swipeSongSwitchHandler, selectNextHandler } from '../PlayerSlice';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import SliderItem from './Slideritem';
+import SliderItem from './SliderItem';
 
 const SliderPlayer = () => {
 
-    const playList = useSelector(selectPlayList);
     const dispatch = useDispatch();
+    const playList = useSelector(selectPlayList);
+    const nextHandler = useSelector(selectNextHandler);
+
+    const slickRef = createRef<Slider>();
+
+    useEffect(() => {
+        console.log(nextHandler)
+        if (nextHandler.action === 'next') {
+            slickRef.current?.slickNext();
+        }
+        if (nextHandler.action === 'prev') {
+            slickRef.current?.slickPrev();
+        }
+    }, [nextHandler])
 
     const settings = {
         dots: false,
@@ -25,12 +36,15 @@ const SliderPlayer = () => {
         centerMode: true,
         centerPadding: "22%",
         speed: 500,
-        afterChange: (id: number) => dispatch(setCurrentSong(id)),
     };
 
     return (
         <SliderWrap>
-            <Slider {...settings}>
+            <Slider
+                ref={slickRef}
+                onSwipe={(s: string) => dispatch(swipeSongSwitchHandler(s))}
+                {...settings}
+            >
                 {playList && playList.map((song) => (
                     <SliderItem key={song.id} label={song.label} />
                 ))}
