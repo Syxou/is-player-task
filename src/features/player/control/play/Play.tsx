@@ -16,8 +16,7 @@ const Play: React.FC = () => {
     React.useEffect(() => {
         if (player) {
             const interval = setInterval(() => {
-                console.log(player)
-                dispatch(updatingTimePoint());
+                dispatch(updatingTimePoint('tick'));
             }, 1000);
             return () => {
                 clearInterval(interval);

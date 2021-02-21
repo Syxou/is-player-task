@@ -95,14 +95,11 @@ export const playerSlice = createSlice({
                 state.timePoint = 0;
             }
         },
-        setTimePoint: (state, action: PayloadAction<number>) => {
-            const maxTimePoint = state.currentSong.time;
-            if (maxTimePoint >= action.payload) {
-                if (action.payload) {
-                    state.timePoint = +action.payload.toFixed(2);
-                } else {
-                    state.timePoint = +state.timePoint.toFixed(2) + 1;
-                }
+        setTimePoint: (state, action: PayloadAction<number | 'tick'>) => {
+            if (action.payload === 'tick') {
+                state.timePoint = +state.timePoint.toFixed(2) + 1;
+            } else {
+                state.timePoint = +action.payload.toFixed(2);
             }
         },
         setPlayList: (state, action: PayloadAction<ISong[]>) => {
@@ -123,10 +120,8 @@ export const playerSlice = createSlice({
             console.log(currentIndex)
             if (currentIndex !== undefined && currentIndex >= 0) {
                 if (state.songs[currentIndex + 1]) {
-                    console.log('if')
                     state.nextSong = { ...state.songs[currentIndex + 1] };
                 } else {
-                    console.log('else')
                     state.nextSong = { ...state.songs[0] };
                 }
             };
@@ -162,12 +157,8 @@ export const swipeSongSwitchHandler = (swipe: string): AppThunk => (dispatch) =>
     dispatch(getNextSong());
 }
 
-export const updatingTimePoint = (amount?: number): AppThunk => (dispatch) => {
-    if (amount) {
-        dispatch(setTimePoint(amount));
-    } else {
-        dispatch(setTimePoint(0));
-    }
+export const updatingTimePoint = (amount: number | 'tick'): AppThunk => (dispatch) => {
+    dispatch(setTimePoint(amount));
 };
 
 export const nextSong = (): AppThunk => (dispatch) => {

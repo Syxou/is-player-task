@@ -1,30 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-rangeslider';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import 'react-rangeslider/lib/index.css'
 
-import { selectCurrentSong, selectTimePoint, updatingTimePoint } from '../../PlayerSlice';
+import { nextSong, selectCurrentSong, selectTimePoint, updatingTimePoint } from '../../PlayerSlice';
 import getTime from '../../../../utils/getTime';
+
 
 const Range: React.FC = () => {
 
+    const [mouseHover, setMouseHover] = useState(false);
     const currentSong = useSelector(selectCurrentSong);
     const timePoint = useSelector(selectTimePoint);
     const dispatch = useDispatch();
 
+    const sliderChangeHandler = (value: number) => {
+        if (value <= currentSong.time && mouseHover) {
+            dispatch(updatingTimePoint(value))
+        }
+    };
+    
+    useEffect(() => {
+        if (timePoint === currentSong.time && !mouseHover) {
+            dispatch(nextSong());
+        }
+    }, [timePoint]);
 
     return (
         <RangeWrap>
             <Timer>{getTime(timePoint)}</Timer>
             <SliderWrap>
                 <Slider
+                    onChangeStart={(e) => setMouseHover(true)}
+                    onChangeComplete={(e) => setMouseHover(false)}
                     value={timePoint}
                     tooltip={false}
-                    min={0}
+                    min={1}
                     max={currentSong.time}
-                    onChange={(v) => dispatch(updatingTimePoint(v))}
+                    onChange={(v) => sliderChangeHandler(v)}
                 />
             </SliderWrap>
             <Timer>{getTime(currentSong.time)}</Timer>

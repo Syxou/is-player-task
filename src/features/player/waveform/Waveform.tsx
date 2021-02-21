@@ -16,7 +16,6 @@ const Waveform = () => {
 
     const currentSong = useSelector(selectCurrentSong);
     const timePoint = useSelector(selectTimePoint);
-    console.log(timePoint, currentSong.time)
     return (
         <WaveformWrap
             timePoint={timePoint}
