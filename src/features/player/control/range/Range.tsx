@@ -26,6 +26,7 @@ const Range: React.FC = () => {
             <SliderWrap>
                 <Slider
                     value={timePoint}
+                    tooltip={false}
                     min={0}
                     max={currentSong.time}
                     onChange={(v) => dispatch(updatingTimePoint(v))}

@@ -18,6 +18,7 @@ export interface ISong {
     artistName: string,
     time: number,
     label: string,
+    waveform: number[],
 };
 
 export interface ISongControl {
@@ -32,6 +33,7 @@ const initialState: IPlayer = {
         artistName: '',
         time: 0,
         label: '',
+        waveform: []
     },
     timePoint: 0,
     play: false,
@@ -125,5 +127,6 @@ export const selectPlayStatus = (state: RootState) => state.player.play;
 export const selectPlayList = (state: RootState) => state.player.songs;
 export const selectCurrentSong = (state: RootState) => state.player.currentSong;
 export const selectTimePoint = (state: RootState) => state.player.timePoint;
+export const selectCurrentWaveform = (state: RootState) => state.player.currentSong.waveform;
 
 export default playerSlice.reducer;

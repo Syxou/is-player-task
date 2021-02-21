@@ -7,6 +7,7 @@ import Control from './control/Control';
 import Range from './control/range/Range';
 import SongName from './control/songName/SongName';
 import SliderPlayer from './slider/Slider';
+import Waveform from './waveform/Waveform';
 
 const Player: React.FC = () => {
     const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Player: React.FC = () => {
             <SongName track={song?.trackName} artist={song?.artistName} />
             <Control />
             <Range />
+            <Waveform />
         </>
     );
 };
