@@ -1,0 +1,2 @@
+(this["webpackJsonpis-player-task"]=this["webpackJsonpis-player-task"]||[]).push([[8],{95:function(s,a,t){"use strict";t.r(a),a.default=t.p+"static/media/back_ico.8ce2639c.svg"}}]);
+//# sourceMappingURL=8.8e6e8872.chunk.js.map
