@@ -9,7 +9,9 @@ interface ISliderItem {
 }
 
 const SliderItem: React.FC<ISliderItem> = ({ label }, ...res) => {
+
     const [img, setImg] = React.useState('');
+
     React.useEffect(() => {
         const imgUrl = importImage(label).then((url) => setImg(url.default))
     }, [])
@@ -17,23 +19,23 @@ const SliderItem: React.FC<ISliderItem> = ({ label }, ...res) => {
     return (
         <SliderItemWrap {...res} id='customItem'>
             <div>
-                <SliderImage src={img} />
+                <img src={img} />
             </div>
         </SliderItemWrap>
     )
 }
 
 const SliderImage = styled.img`
-    height: 350px;
+
 `;
 
 const SliderItemWrap = styled.div`
     display: flex !important;
     align-items: center;
     justify-content: center;
-    height: 55.56vw;
-    transform: scale(0.4);
-    transition: transform 0.5s ease;
+    /* height: 55.56vw; */
+
+    transition: all 0.5s ease;
 `;
 
 export default SliderItem;

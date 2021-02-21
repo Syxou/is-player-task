@@ -132,9 +132,9 @@ export const playerSlice = createSlice({
             state.repeat = !state.repeat;
         },
         setShuffle: (state, action: PayloadAction<ISong[]>) => {
-            if(state.shuffle){ // off
+            if (state.shuffle) { // off
                 loadPlayList();
-            }else{
+            } else { // on
                 state.songs = action.payload;
             }
             state.shuffle = !state.shuffle;

@@ -15,8 +15,10 @@ const NextTrack: React.FC<INextTrack> = ({ nameTrack }) => {
 }
 
 const Wrap = styled.div`
-    display: block;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-left: 5%;
 `;
 
 const Next = styled.p`
@@ -25,7 +27,6 @@ const Next = styled.p`
     font-weight: 300;
     font-stretch: normal;
     font-style: normal;
-    line-height: 2;
     letter-spacing: normal;
     color: #6f729c;
 `;
@@ -35,7 +36,6 @@ const Track = styled.p`
     font-weight: 300;
     font-stretch: normal;
     font-style: normal;
-    line-height: 1.8;
     letter-spacing: normal;
     color: #1b1b1b;
 `;

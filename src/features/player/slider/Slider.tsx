@@ -52,20 +52,32 @@ const SliderPlayer = () => {
     )
 }
 
-
-
 const SliderWrap = styled.div`
     width: 100vw;
-    height: 320px;
+    height: 35vh;
+
+    #customItem{
+        height:25vh;
+        & > div{
+            height:25vh;
+            display: flex;
+            align-items: center;
+        }
+    }
 
     .slick-active {
         #customItem {
-            transform: scale(1) !important;
-            transition: transform 0.5s ease;
-            img{
+            & > div{
                 height: 100%;
             }
+            img{
+                height: 25vh;
+            }
         }
+    }
+    img{
+        height: 15vh;
+        transition: height 0.3s;
     }
 `;
 
