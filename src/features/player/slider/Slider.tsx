@@ -18,7 +18,6 @@ const SliderPlayer = () => {
     const slickRef = createRef<Slider>();
 
     useEffect(() => {
-        console.log(nextHandler)
         if (nextHandler.action === 'next') {
             slickRef.current?.slickNext();
         }

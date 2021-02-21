@@ -22,18 +22,19 @@ const Btn = styled.button<IButton>`
     border: none;
     background: none;
     padding: 0;
+
     path{
-        fill: ${props => props.activeHandler ? '#939393' : null}   
+        fill: ${props => props.activeHandler ? '#939393' : null};  
     }
-    &: active{
-    path{
-        fill:#939393;
+    svg{
+        height: 100%;
+        width: auto;
     }
-}
-svg{
-    height: 100 %;
-    width: auto;
-}
+    &:active{
+        path{
+            fill:#939393;
+        }
+    }
 `;
 
 export default Button

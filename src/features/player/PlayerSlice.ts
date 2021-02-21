@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { idText, sortAndDeduplicateDiagnostics } from 'typescript';
 import { AppThunk, RootState } from '../../app/store';
 import fakePlayList from '../../utils/fakePlayList';
+import shuffleArray from '../../utils/shuffleArray';
 
 export interface IPlayer {
     songs: ISong[],
@@ -68,6 +69,7 @@ export const playerSlice = createSlice({
             state.play = !state.play;
         },
         setNextSong: (state) => {
+
             let currentIndex;
             if (state.currentSong) {
                 currentIndex = state.songs.findIndex((s) => s.id === state.currentSong.id);
@@ -113,6 +115,7 @@ export const playerSlice = createSlice({
             };
         },
         getNextSong: (state) => {
+
             let currentIndex;
             if (state.currentSong) {
                 currentIndex = state.songs.findIndex((s) => s.id === state.currentSong.id);
@@ -123,11 +126,19 @@ export const playerSlice = createSlice({
                 } else {
                     state.nextSong = { ...state.songs[0] };
                 }
-            };
+            }
         },
         setRepeat: (state) => {
             state.repeat = !state.repeat;
         },
+        setShuffle: (state, action: PayloadAction<ISong[]>) => {
+            if(state.shuffle){ // off
+                loadPlayList();
+            }else{
+                state.songs = action.payload;
+            }
+            state.shuffle = !state.shuffle;
+        }
     },
 })
 
@@ -140,6 +151,7 @@ export const {
     setTimePoint,
     getNextSong,
     setRepeat,
+    setShuffle,
 } = playerSlice.actions;
 
 export const loadPlayList = (): AppThunk => (dispatch) => {
@@ -148,6 +160,11 @@ export const loadPlayList = (): AppThunk => (dispatch) => {
         dispatch(getNextSong());
     }, 535);
 };
+
+export const shufflePlayer = (songs: ISong[]): AppThunk => (dispatch) => {
+    const array = songs;
+    dispatch(setShuffle(shuffleArray(array)))
+}
 
 export const swipeSongSwitchHandler = (swipe: string): AppThunk => (dispatch) => {
     if (swipe === 'left') {
@@ -188,5 +205,6 @@ export const selectCurrentWaveform = (state: RootState) => state.player.currentS
 export const selectNextSong = (state: RootState) => state.player.nextSong;
 export const selectNextHandler = (state: RootState) => state.player.nextHandler;
 export const selectRepeatStatus = (state: RootState) => state.player.repeat;
+export const selectShuffleStatus = (state: RootState) => state.player.shuffle;
 
 export default playerSlice.reducer;

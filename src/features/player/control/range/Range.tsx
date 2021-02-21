@@ -24,7 +24,7 @@ const Range: React.FC = () => {
     };
 
     useEffect(() => {
-        if (timePoint === currentSong.time && !mouseHover) {
+        if (timePoint >= currentSong.time && !mouseHover) {
             if (repeatStatus) {
                 dispatch(updatingTimePoint(0));
             } else {
